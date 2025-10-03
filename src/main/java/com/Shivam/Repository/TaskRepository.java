@@ -89,4 +89,38 @@ public class TaskRepository {
 
             return task;
         }
+
+    public void saveTasks(List<Task> tasks) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tasks.json"))) {
+            writer.write("["); // start of JSON array
+
+            for (int i = 0; i < tasks.size(); i++) {
+                Task t = tasks.get(i);
+
+                // Escape quotes in description
+                String safeDescription = t.getDescription().replace("\\", "\\\\").replace("\"", "\\\"");
+
+                // Build JSON string for one task
+                String taskJson = "{"
+                        + "\"id\": " + t.getId() + ","
+                        + "\"description\": \"" + safeDescription + "\","
+                        + "\"status\": \"" + t.getStatus() + "\","
+                        + "\"createdAt\": \"" + t.getCreatedAt() + "\","
+                        + "\"updatedAt\": \"" + t.getUpdatedAt() + "\""
+                        + "}";
+
+                writer.write(taskJson);
+
+                // Add comma if not the last task
+                if (i < tasks.size() - 1) {
+                    writer.write(",");
+                }
+            }
+
+            writer.write("]"); // end of JSON array
+
+        } catch (IOException e) {
+            System.out.println("Error saving tasks: " + e.getMessage());
+        }
+    }
 }
