@@ -50,6 +50,7 @@ public class TaskService {
         for (Task t : tasks) {
             if (t.getId() == id) {
                 tasks.remove(t);
+                repo.saveTasks(tasks);
                 return true;
             }
         }
