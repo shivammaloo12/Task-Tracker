@@ -28,12 +28,14 @@ public class TaskRepository {
                 }
                 String json=jsonBuilder.toString();
 
-                if(!json.isEmpty()){
+                if(json.isEmpty()  || json.equals("[]")){
                     System.out.println("Empty");
                     return tasks;
                 }
 
-                json =json.substring(1,json.length()-1);
+                if (json.startsWith("[") && json.endsWith("]")) {
+                    json = json.substring(1, json.length() - 1);
+                }
 
                 String[] objects = json.split("\\},\\s*\\{");
 
